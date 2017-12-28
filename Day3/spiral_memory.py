@@ -8,41 +8,54 @@ def execute(input):
 
 
 def make_dat_spiral(last_number):
-    i = 2
-    Matrix = [[1]]
-    matrix_width = 1
-    first_add = True
-
+    i = 5
+    Matrix = [[4, 3], [1, 2]]
+    matrix_width = 2
     up = True
     left = True
-    down = True
-    right = True
+    down = False
+    right = False
 
     current_row = 0
     while i <= last_number:
         if matrix_square(Matrix):
-
             matrix_width += 1
-            if first_add:
-                  # add a number to the bottom
-                Matrix[current_row].append(i)
-                first_add = False
-            else:
-                # add a number to the top
-                Matrix[current_row].insert(0, i)
+            up = True
+            left = True
+            down = True
+            right = True
+            current_row = 0
+            Matrix[0].insert(0, i)
         else:
-            if up:
-                # if expanding upward to make new 1st row
+            print(Matrix)
+            print(down)
+            print(len(Matrix))
+            print(matrix_width)
+            print(current_row)
+            if down and len(Matrix) <= matrix_width:
+                if current_row == len(Matrix) - 1:
+                    Matrix += [i]
+                    down = False
+                    current_row += 1
+                else:
+                    current_row += 1
+                    Matrix[current_row].insert(0, i)
+            elif right and len(Matrix[current_row]) <= matrix_width:
+                Matrix[current_row].append(i)
+                if len(Matrix[current_row]):
+                    right = False
+            elif up and len(Matrix) <= matrix_width:
                 if current_row == 0:
                     Matrix.insert(0, [i])
                     up = False
                 else:
                     Matrix[current_row].append(i)
                     current_row -= 1
-            elif left:
+            elif left and len(Matrix[current_row]) <= matrix_width:
                 Matrix[current_row].insert(0, i)
+                if len(Matrix[current_row]):
+                    left = False
         i += 1
-    print(Matrix)
     return Matrix
 
 
@@ -69,6 +82,6 @@ def matrix_square(matrix):
 
 
 if __name__ == '__main__':
-    big_boy_number = 4
+    big_boy_number = 8
     output = make_dat_spiral(big_boy_number)
     print_matrix(output)
